@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="SongBird.Core/SongBird.Core.csproj" />
+  <Project Path="SongBird.Desktop/SongBird.Desktop.csproj" />
+  <Project Path="SongBird.Infrastructure/SongBird.Infrastructure.csproj" />
+  <Project Path="SongBird.Playback/SongBird.Playback.csproj" />
+  <Project Path="SongBird.Tests/SongBird.Tests.csproj" />
+</Solution>

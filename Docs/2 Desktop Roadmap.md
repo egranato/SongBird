@@ -16,8 +16,10 @@ Library and Track IDs must be generated independently of filesystem paths. Renam
 
 The metadata reader's output (`AudioFileMetadata`: Title, Artist, Album, etc.) must include the embedded artwork, even though Phase 6 is where caching/dedup/display actually happen. Reading artwork is part of Phase 1's scan pass, not a scanning-contract change bolted on later.
 
-## Phase 2 — Library browsing
+## Phase 2 — Library browsing ✅ done
 Songs / Albums / Artists views, plus search. Selecting an artist/album drills into its tracks. Double-click starts playback.
+
+Scope additions decided during implementation: since nothing could create a `Library` yet, Phase 2 also includes a minimal "point at a folder" first-run flow (folder picker → save `Library` → run Phase 1's scanner with progress → show the browsing UI). And since `IPlaybackService` doesn't exist until Phase 3, double-click currently only sets a shared `PlayerViewModel.NowPlaying` (selection, no audio) — Phase 3 wires real playback in behind the same command, no UI rework needed.
 
 ## Phase 3 — Playback engine
 `IPlaybackService` abstraction in `Playback`. It plays media — it does not decide what plays next. Surface: `Load(track)`, `Play`, `Pause`, `Stop`, `Seek`, `Volume`, plus events `PlaybackEnded`, `PositionChanged`, `StateChanged`. Playback state is independent of whatever screen is currently showing.

@@ -1,0 +1,67 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:SongBird.Desktop.ViewModels"
+             xmlns:model="using:SongBird.Core.Models"
+             xmlns:conv="using:SongBird.Desktop.Converters"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="600"
+             x:Class="SongBird.Desktop.Views.LibraryView"
+             x:DataType="vm:LibraryViewModel">
+
+    <UserControl.Resources>
+        <DataTemplate x:Key="TrackItemTemplate" x:DataType="model:Track">
+            <StackPanel Orientation="Horizontal" Margin="4" DoubleTapped="OnTrackDoubleTapped">
+                <TextBlock Text="{Binding TrackNumber}" Width="32" />
+                <TextBlock Text="{Binding Title}" Width="320" TextTrimming="CharacterEllipsis" />
+                <TextBlock Text="{Binding Artist}" Opacity="0.8" Width="220" TextTrimming="CharacterEllipsis" />
+                <TextBlock Text="{Binding Duration, Converter={x:Static conv:DurationConverter.Instance}}" />
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Grid RowDefinitions="Auto,*">
+        <DockPanel Grid.Row="0" Margin="8">
+            <Button DockPanel.Dock="Right" Content="Rescan" Command="{Binding RescanCommand}" IsEnabled="{Binding !IsScanning}" />
+            <TextBox Text="{Binding SearchText}" PlaceholderText="Search songs, artists, albums…" Margin="0,0,8,0" />
+        </DockPanel>
+
+        <Grid Grid.Row="1">
+            <DockPanel IsVisible="{Binding DrilldownTracks, Converter={x:Static ObjectConverters.IsNotNull}}">
+                <DockPanel DockPanel.Dock="Top" Margin="8">
+                    <Button DockPanel.Dock="Left" Content="← Back" Command="{Binding CloseDrilldownCommand}" />
+                    <TextBlock Text="{Binding DrilldownTitle}" FontSize="18" Margin="12,0,0,0" VerticalAlignment="Center" />
+                </DockPanel>
+                <ListBox ItemsSource="{Binding DrilldownTracks}" ItemTemplate="{StaticResource TrackItemTemplate}" />
+            </DockPanel>
+
+            <TabControl IsVisible="{Binding DrilldownTracks, Converter={x:Static ObjectConverters.IsNull}}">
+                <TabItem Header="Songs">
+                    <ListBox ItemsSource="{Binding Songs}" ItemTemplate="{StaticResource TrackItemTemplate}" />
+                </TabItem>
+                <TabItem Header="Albums">
+                    <ListBox ItemsSource="{Binding Albums}" SelectedItem="{Binding SelectedAlbum}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="vm:AlbumGroup">
+                                <StackPanel Margin="4">
+                                    <TextBlock Text="{Binding Title}" FontWeight="Bold" />
+                                    <TextBlock Text="{Binding Artist}" Opacity="0.8" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </TabItem>
+                <TabItem Header="Artists">
+                    <ListBox ItemsSource="{Binding Artists}" SelectedItem="{Binding SelectedArtist}">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate x:DataType="vm:ArtistGroup">
+                                <TextBlock Text="{Binding Name}" Margin="4" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </Grid>
+
+</UserControl>

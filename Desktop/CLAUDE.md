@@ -1,6 +1,6 @@
 # Desktop
 
-Avalonia (C#/.NET) desktop music library + player, targeting Windows and macOS from one codebase. Phase 0 (scaffold) and Phase 1 (library + scanner) are done. Update this file if the actual structure ever diverges from it.
+Avalonia (C#/.NET) desktop music library + player, targeting Windows and macOS from one codebase. Phase 0 (scaffold), Phase 1 (library + scanner), and Phase 2 (library browsing) are done. Update this file if the actual structure ever diverges from it.
 
 Current phase: see [Docs/2 Desktop Roadmap.md](../Docs/2%20Desktop%20Roadmap.md). Don't build anything from a later phase, or anything on the "not in 0.1" list there, without checking with the user first.
 
@@ -33,6 +33,16 @@ New code goes in the project matching that table — don't search for precedent,
 - `Scanning/FileSystemMediaScanner` — implements `IMediaScanner`; runs the whole scan via `Task.Run` internally so callers never need to remember to background it. Handles the identity/move-detection logic described below.
 
 Look at these four files before writing anything scanner- or persistence-adjacent — the incremental-scan and move-detection algorithm is non-obvious and already solved there.
+
+### What's in Desktop (as of Phase 2)
+
+- `Services/IFolderPickerService` + `FolderPickerService` — wraps Avalonia's `Window.StorageProvider` behind an interface so ViewModels don't depend on a `Window`. Registered in DI with the real `MainWindow` instance (see `App.axaml.cs` — the window is constructed *before* `BuildServices` for this reason).
+- `Converters/DurationConverter` — `TimeSpan` → `m:ss` / `h:mm:ss` for display. **Known Avalonia gotcha**: a `Grid` with star-sized (`*`) columns inside content that isn't itself width-constrained (e.g. a `ListBox.ItemTemplate` with default `HorizontalContentAlignment`) silently drops the content in columns after the star columns — no error, no warning, items after the star columns just don't render. Fixed by using a `StackPanel` with fixed-`Width` `TextBlock`s instead (see `TrackItemTemplate` in `LibraryView.axaml`). Don't reach for star-sized Grid columns inside list item templates without testing at runtime.
+- `ViewModels/MainViewModel` — app shell; on startup picks `CreateLibraryViewModel` (no library yet) or `LibraryViewModel` (library exists) and sets it as `CurrentPage`. `MainWindow.axaml` is just a `ContentControl` bound to `CurrentPage`; `ViewLocator` resolves the matching View by naming convention (`FooViewModel` → `FooView`).
+- `ViewModels/CreateLibraryViewModel` — first-run folder picker → saves `Library` → runs the Phase 1 scanner with progress → raises `LibraryReady`.
+- `ViewModels/LibraryViewModel` — owns `Songs`/`Albums`/`Artists` (grouped from the loaded tracks), `SearchText` filtering, and drilldown (`SelectedAlbum`/`SelectedArtist` → `DrilldownTracks`). Single-library scope for now (always loads `GetLibrariesAsync()[0]`).
+- `ViewModels/PlayerViewModel` — DI singleton holding `NowPlaying`. Double-click in `LibraryView` sets this; no audio yet (Phase 3 wires a real player in behind the same command).
+- Track rows use `DoubleTapped` in code-behind (`LibraryView.axaml.cs`) rather than a binding, since Avalonia has no built-in double-click-to-command binding — this is the one place View code-behind is expected, not a pattern to generalize.
 
 ## Pinned stack decisions (don't re-litigate)
 

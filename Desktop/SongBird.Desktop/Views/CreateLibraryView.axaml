@@ -1,0 +1,23 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:SongBird.Desktop.ViewModels"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SongBird.Desktop.Views.CreateLibraryView"
+             x:DataType="vm:CreateLibraryViewModel">
+
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="16" Width="360">
+        <TextBlock Text="Welcome to SongBird" FontSize="24" HorizontalAlignment="Center" />
+        <TextBlock Text="Point SongBird at a folder of music to build your library."
+                   TextWrapping="Wrap" HorizontalAlignment="Center" />
+        <Button Content="Choose Music Folder"
+                Command="{Binding ChooseFolderCommand}"
+                IsEnabled="{Binding !IsScanning}"
+                HorizontalAlignment="Center" />
+        <TextBlock Text="{Binding StatusText}"
+                   IsVisible="{Binding StatusText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                   TextWrapping="Wrap" HorizontalAlignment="Center" />
+    </StackPanel>
+
+</UserControl>

@@ -7,7 +7,7 @@ Each phase should leave the app in a buildable, runnable state. Don't start a ph
 ## Phase 0 — Solution scaffolding ✅ done
 `SongBird.slnx` with `Core` / `Infrastructure` / `Playback` / `Desktop` / `Tests` projects (see [Desktop/CLAUDE.md](../Desktop/CLAUDE.md) for the split). DI via `Microsoft.Extensions.DependencyInjection`, logging wired up, empty Avalonia shell that launches.
 
-## Phase 1 — Library + Scanner
+## Phase 1 — Library + Scanner ✅ done
 `Library`/`Track` domain model. SQLite schema. Recursive scan with TagLibSharp metadata reads. Incremental rescan using path+size+mtime, hashing only when needed. A corrupt/unsupported file is logged and skipped — it must never abort a scan. Scan progress must not block the UI.
 
 Library and Track IDs must be generated independently of filesystem paths. Renaming or moving a file within a library must not conceptually create a new track when its identity can still be established (e.g. via hash/tag-based matching against the existing index) — it should be recognized as the same track at a new path, not scanned in as a new one.

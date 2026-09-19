@@ -1,6 +1,6 @@
 # Desktop
 
-Avalonia (C#/.NET) desktop music library + player, targeting Windows and macOS from one codebase. Solution is scaffolded (Phase 0 done); domain model/scanner land in Phase 1. Update this file if the actual structure ever diverges from it.
+Avalonia (C#/.NET) desktop music library + player, targeting Windows and macOS from one codebase. Phase 0 (scaffold) and Phase 1 (library + scanner) are done. Update this file if the actual structure ever diverges from it.
 
 Current phase: see [Docs/2 Desktop Roadmap.md](../Docs/2%20Desktop%20Roadmap.md). Don't build anything from a later phase, or anything on the "not in 0.1" list there, without checking with the user first.
 
@@ -8,22 +8,37 @@ Current phase: see [Docs/2 Desktop Roadmap.md](../Docs/2%20Desktop%20Roadmap.md)
 
 ```
 SongBird.slnx             SDK-generated solution file (XML format, replaces .sln)
-SongBird.Core             domain model, no Avalonia/UI refs: Library, Track, Artist, Album, Playlist, Queue, Metadata, MediaLocation, interfaces (ILibraryRepository, IMediaScanner, IMetadataReader, IPlaybackService) — currently empty, fills in Phase 1+
-SongBird.Infrastructure   SQLite, filesystem, tag parsing, hashing, artwork extraction, library manifests — currently empty
-SongBird.Playback         IPlaybackService implementation(s), wraps the chosen audio backend — currently empty
+SongBird.Core             domain model, no Avalonia/UI refs, no third-party deps
+SongBird.Infrastructure   SQLite, filesystem, tag parsing, hashing, artwork extraction, library manifests
+SongBird.Playback         IPlaybackService implementation(s), wraps the chosen audio backend — currently empty (Phase 3)
 SongBird.Desktop          Avalonia: Views, ViewModels, Navigation, Commands, desktop-specific services. Composition root (DI + logging) lives in App.axaml.cs.
-SongBird.Tests            xUnit — currently empty
+SongBird.Tests            xUnit
 ```
 
 Project references: `Infrastructure` → `Core`; `Playback` → `Core`; `Desktop` → all three; `Tests` → `Core`/`Infrastructure`/`Playback` (not `Desktop` — UI isn't the test priority, see below).
 
 New code goes in the project matching that table — don't search for precedent, this is the precedent.
 
+### What's in Core (as of Phase 1)
+
+- `Models/`: `Library` (Id, Name, RootPath), `Track` (Id, LibraryId, RelativePath, FileSize, FileLastWriteTimeUtc, FileHash, Duration, Format, tag fields, DateAddedUtc)
+- `Metadata/AudioFileMetadata`: what an `IMetadataReader` returns for one file — tag fields + `Artwork` bytes
+- `Scanning/`: `ScanProgress`, `ScanResult`/`ScanError`, `SupportedAudioExtensions` (.mp3/.flac/.m4a/.wav/.ogg)
+- `Abstractions/`: `ILibraryRepository`, `IMetadataReader`, `IMediaScanner` (`IPlaybackService` doesn't exist yet — Phase 3)
+
+### What's in Infrastructure (as of Phase 1)
+
+- `Persistence/SqliteLibraryRepository` — implements `ILibraryRepository`, creates its own schema on first use, one connection per operation (pooled by the driver)
+- `Metadata/TagLibMetadataReader` — implements `IMetadataReader` via TagLibSharp
+- `Scanning/FileSystemMediaScanner` — implements `IMediaScanner`; runs the whole scan via `Task.Run` internally so callers never need to remember to background it. Handles the identity/move-detection logic described below.
+
+Look at these four files before writing anything scanner- or persistence-adjacent — the incremental-scan and move-detection algorithm is non-obvious and already solved there.
+
 ## Pinned stack decisions (don't re-litigate)
 
 - C# / .NET 10, Avalonia 12 (CommunityToolkit.Mvvm), MVVM-ish
-- SQLite via Dapper or raw SQL — not EF Core (not added yet, add when Phase 1 needs it)
-- TagLibSharp for tag reading (not added yet, add when Phase 1 needs it)
+- SQLite via `Microsoft.Data.Sqlite` + Dapper — not EF Core
+- TagLibSharp for tag reading
 - `Microsoft.Extensions.DependencyInjection` for DI — wired in `SongBird.Desktop/App.axaml.cs` (`BuildServices()`); register new services there
 - `Microsoft.Extensions.Logging` (console provider) for logging — already wired
 - xUnit for tests

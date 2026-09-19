@@ -4,8 +4,8 @@ Derived from [1 Initial POC.md](1%20Initial%20POC.md). Scope: desktop client onl
 
 Each phase should leave the app in a buildable, runnable state. Don't start a phase until the previous one is done.
 
-## Phase 0 — Solution scaffolding
-`SongBird.sln` with `Core` / `Infrastructure` / `Playback` / `Desktop` / `Tests` projects (see [Desktop/CLAUDE.md](../Desktop/CLAUDE.md) for the split). DI via `Microsoft.Extensions.DependencyInjection`, logging wired up, empty Avalonia shell that launches.
+## Phase 0 — Solution scaffolding ✅ done
+`SongBird.slnx` with `Core` / `Infrastructure` / `Playback` / `Desktop` / `Tests` projects (see [Desktop/CLAUDE.md](../Desktop/CLAUDE.md) for the split). DI via `Microsoft.Extensions.DependencyInjection`, logging wired up, empty Avalonia shell that launches.
 
 ## Phase 1 — Library + Scanner
 `Library`/`Track` domain model. SQLite schema. Recursive scan with TagLibSharp metadata reads. Incremental rescan using path+size+mtime, hashing only when needed. A corrupt/unsupported file is logged and skipped — it must never abort a scan. Scan progress must not block the UI.

@@ -27,7 +27,9 @@
 
             <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" HorizontalAlignment="Center">
                 <Button Content="{Binding State, Converter={x:Static conv:PlaybackStateConverter.Instance}}"
-                        Command="{Binding TogglePlayPauseCommand}" Width="64" />
+                        Command="{Binding TogglePlayPauseCommand}"
+                        IsEnabled="{Binding NowPlaying, Converter={x:Static ObjectConverters.IsNotNull}}"
+                        Width="64" />
                 <TextBlock Text="{Binding Position, Converter={x:Static conv:DurationConverter.Instance}}"
                            VerticalAlignment="Center" Width="40" />
                 <Slider Name="SeekSlider" Minimum="0" Maximum="{Binding Duration.TotalSeconds}"

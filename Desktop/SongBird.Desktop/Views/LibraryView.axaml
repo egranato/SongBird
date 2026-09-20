@@ -11,7 +11,7 @@
 
     <UserControl.Resources>
         <DataTemplate x:Key="TrackItemTemplate" x:DataType="model:Track">
-            <StackPanel Orientation="Horizontal" Margin="4" DoubleTapped="OnTrackDoubleTapped">
+            <StackPanel Orientation="Horizontal" Margin="4">
                 <TextBlock Text="{Binding TrackNumber}" Width="32" />
                 <TextBlock Text="{Binding Title}" Width="320" TextTrimming="CharacterEllipsis" />
                 <TextBlock Text="{Binding Artist}" Opacity="0.8" Width="220" TextTrimming="CharacterEllipsis" />
@@ -32,12 +32,14 @@
                     <Button DockPanel.Dock="Left" Content="← Back" Command="{Binding CloseDrilldownCommand}" />
                     <TextBlock Text="{Binding DrilldownTitle}" FontSize="18" Margin="12,0,0,0" VerticalAlignment="Center" />
                 </DockPanel>
-                <ListBox ItemsSource="{Binding DrilldownTracks}" ItemTemplate="{StaticResource TrackItemTemplate}" />
+                <ListBox ItemsSource="{Binding DrilldownTracks}" ItemTemplate="{StaticResource TrackItemTemplate}"
+                         DoubleTapped="OnTrackListDoubleTapped" />
             </DockPanel>
 
             <TabControl IsVisible="{Binding DrilldownTracks, Converter={x:Static ObjectConverters.IsNull}}">
                 <TabItem Header="Songs">
-                    <ListBox ItemsSource="{Binding Songs}" ItemTemplate="{StaticResource TrackItemTemplate}" />
+                    <ListBox ItemsSource="{Binding Songs}" ItemTemplate="{StaticResource TrackItemTemplate}"
+                             DoubleTapped="OnTrackListDoubleTapped" />
                 </TabItem>
                 <TabItem Header="Albums">
                     <ListBox ItemsSource="{Binding Albums}" SelectedItem="{Binding SelectedAlbum}">

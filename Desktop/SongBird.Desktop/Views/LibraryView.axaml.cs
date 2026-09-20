@@ -12,12 +12,13 @@ public partial class LibraryView : UserControl
         InitializeComponent();
     }
 
-    // Avalonia has no built-in "double-click a list item" binding, so this is handled here
-    // rather than in the ViewModel. The template root's DataContext is the tapped Track.
-    private void OnTrackDoubleTapped(object? sender, TappedEventArgs e)
+    // DoubleTapped is attached to the ListBox itself, not to content inside its ItemTemplate:
+    // the ListBoxItem's own pointer handling (for selection) swallows the gesture before it
+    // reaches a recognizer nested inside the template, so a per-row handler never fires.
+    private void OnTrackListDoubleTapped(object? sender, TappedEventArgs e)
     {
         if (DataContext is LibraryViewModel viewModel
-            && sender is Control { DataContext: Track track })
+            && sender is ListBox { SelectedItem: Track track })
         {
             viewModel.PlayTrackCommand.Execute(track);
         }

@@ -15,6 +15,8 @@ public partial class MainViewModel : ViewModelBase
     [ObservableProperty]
     public partial ViewModelBase? CurrentPage { get; set; }
 
+    public PlayerViewModel Player => _player;
+
     public MainViewModel(
         ILibraryRepository repository,
         IMediaScanner scanner,

@@ -12,6 +12,7 @@ using SongBird.Desktop.Views;
 using SongBird.Infrastructure.Metadata;
 using SongBird.Infrastructure.Persistence;
 using SongBird.Infrastructure.Scanning;
+using SongBird.Playback;
 
 namespace SongBird.Desktop;
 
@@ -57,6 +58,7 @@ public partial class App : Application
         services.AddSingleton<ILibraryRepository>(_ => new SqliteLibraryRepository(databasePath));
         services.AddSingleton<IMetadataReader, TagLibMetadataReader>();
         services.AddSingleton<IMediaScanner, FileSystemMediaScanner>();
+        services.AddSingleton<IPlaybackService, LibVlcPlaybackService>();
 
         return services.BuildServiceProvider();
     }

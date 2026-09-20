@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:SongBird.Desktop.ViewModels"
+             xmlns:conv="using:SongBird.Desktop.Converters"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="64"
+             x:Class="SongBird.Desktop.Views.PlayerBarView"
+             x:DataType="vm:PlayerViewModel">
+
+    <Border Background="{DynamicResource Brush.Surface}"
+            BorderBrush="{DynamicResource Brush.Border}"
+            BorderThickness="0,0,0,1"
+            Padding="12,8">
+        <DockPanel LastChildFill="True">
+            <StackPanel DockPanel.Dock="Left" Width="220" VerticalAlignment="Center">
+                <TextBlock Text="{Binding NowPlaying.Title}" FontWeight="Bold" TextTrimming="CharacterEllipsis" />
+                <TextBlock Text="{Binding NowPlaying.Artist}" Foreground="{DynamicResource Brush.TextSecondary}"
+                           FontSize="12" TextTrimming="CharacterEllipsis" />
+            </StackPanel>
+
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8"
+                        VerticalAlignment="Center" Width="140">
+                <TextBlock Text="Vol" Foreground="{DynamicResource Brush.TextSecondary}" VerticalAlignment="Center" />
+                <Slider Minimum="0" Maximum="1" Value="{Binding Volume}" Width="100" VerticalAlignment="Center" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Button Content="{Binding State, Converter={x:Static conv:PlaybackStateConverter.Instance}}"
+                        Command="{Binding TogglePlayPauseCommand}" Width="64" />
+                <TextBlock Text="{Binding Position, Converter={x:Static conv:DurationConverter.Instance}}"
+                           VerticalAlignment="Center" Width="40" />
+                <Slider Name="SeekSlider" Minimum="0" Maximum="{Binding Duration.TotalSeconds}"
+                        Value="{Binding Position.TotalSeconds, Mode=OneWay}"
+                        PointerPressed="OnSeekSliderPointerPressed"
+                        PointerReleased="OnSeekSliderPointerReleased"
+                        Width="320" VerticalAlignment="Center" />
+                <TextBlock Text="{Binding Duration, Converter={x:Static conv:DurationConverter.Instance}}"
+                           VerticalAlignment="Center" Width="40" />
+            </StackPanel>
+        </DockPanel>
+    </Border>
+
+</UserControl>

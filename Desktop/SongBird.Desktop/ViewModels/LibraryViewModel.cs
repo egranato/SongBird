@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -62,7 +63,16 @@ public partial class LibraryViewModel(
     }
 
     [RelayCommand]
-    private void PlayTrack(Track track) => player.NowPlaying = track;
+    private void PlayTrack(Track track)
+    {
+        if (_library is null)
+        {
+            return;
+        }
+
+        var absolutePath = Path.Combine(_library.RootPath, track.RelativePath);
+        player.PlayTrack(track, absolutePath);
+    }
 
     [RelayCommand]
     private void CloseDrilldown()

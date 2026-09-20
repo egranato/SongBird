@@ -21,10 +21,12 @@ Songs / Albums / Artists views, plus search. Selecting an artist/album drills in
 
 Scope additions decided during implementation: since nothing could create a `Library` yet, Phase 2 also includes a minimal "point at a folder" first-run flow (folder picker → save `Library` → run Phase 1's scanner with progress → show the browsing UI). And since `IPlaybackService` doesn't exist until Phase 3, double-click currently only sets a shared `PlayerViewModel.NowPlaying` (selection, no audio) — Phase 3 wires real playback in behind the same command, no UI rework needed.
 
-## Phase 3 — Playback engine
+## Phase 3 — Playback engine ✅ done
 `IPlaybackService` abstraction in `Playback`. It plays media — it does not decide what plays next. Surface: `Load(track)`, `Play`, `Pause`, `Stop`, `Seek`, `Volume`, plus events `PlaybackEnded`, `PositionChanged`, `StateChanged`. Playback state is independent of whatever screen is currently showing.
 
 Next/Previous/Repeat/Shuffle are queue/orchestration concerns, not playback-service concerns — see Phase 4. The application-level controller reacts to `PlaybackEnded` by asking the queue what happens next; `IPlaybackService` itself has no queue awareness.
+
+Backend: LibVLCSharp (see [Desktop/CLAUDE.md](../Desktop/CLAUDE.md) for why). `Load` takes a resolved absolute path, not a `Track` — `LibraryViewModel` resolves `Library.RootPath + Track.RelativePath` before calling into `PlayerViewModel`, keeping the playback service itself ignorant of the domain model. A persistent transport bar (`PlayerBarView`) now sits outside the page-navigation area in `MainWindow`, so playback state is visibly independent of the current screen as required. Verified end-to-end against a real file from the user's own library (Load/Play/Pause/Seek/Volume and all three events), not just unit-tested — audio playback isn't in this project's test-priority list (see Desktop/CLAUDE.md) since it's hardware/native-runtime-dependent.
 
 ## Phase 4 — Queue
 `PlaybackQueue` domain object: explicit track-index permutation for shuffle (never pick-next-at-random). Repeat off/all/one. Play Next and Add to Queue actions. Queue + position survive app restart. Queue UI shows current track and up-next list.

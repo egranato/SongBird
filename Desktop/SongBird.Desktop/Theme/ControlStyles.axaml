@@ -1,0 +1,50 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Base control colors, centralized here instead of hardcoded per-control. -->
+
+    <Style Selector="Window">
+        <Setter Property="Background" Value="{DynamicResource Brush.Background}" />
+    </Style>
+
+    <Style Selector="TextBlock">
+        <Setter Property="Foreground" Value="{DynamicResource Brush.TextPrimary}" />
+    </Style>
+
+    <Style Selector="Button">
+        <Setter Property="Background" Value="{DynamicResource Brush.Surface}" />
+        <Setter Property="Foreground" Value="{DynamicResource Brush.TextPrimary}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border}" />
+    </Style>
+
+    <Style Selector="TextBox">
+        <Setter Property="Background" Value="{DynamicResource Brush.Surface}" />
+        <Setter Property="Foreground" Value="{DynamicResource Brush.TextPrimary}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource Brush.Border}" />
+    </Style>
+
+    <Style Selector="TextBox /template/ TextBlock#PART_Watermark">
+        <Setter Property="Foreground" Value="{DynamicResource Brush.TextSecondary}" />
+    </Style>
+
+    <Style Selector="ListBox">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <Style Selector="ListBoxItem">
+        <Setter Property="Foreground" Value="{DynamicResource Brush.TextPrimary}" />
+    </Style>
+
+    <Style Selector="TabControl">
+        <Setter Property="Background" Value="Transparent" />
+    </Style>
+
+    <Style Selector="TabItem">
+        <Setter Property="Foreground" Value="{DynamicResource Brush.TextSecondary}" />
+    </Style>
+
+    <Style Selector="TabItem:selected">
+        <Setter Property="Foreground" Value="{DynamicResource Brush.TextPrimary}" />
+    </Style>
+
+</Styles>

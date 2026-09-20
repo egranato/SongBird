@@ -44,6 +44,15 @@ Look at these four files before writing anything scanner- or persistence-adjacen
 - `ViewModels/PlayerViewModel` — DI singleton holding `NowPlaying`. Double-click in `LibraryView` sets this; no audio yet (Phase 3 wires a real player in behind the same command).
 - Track rows use `DoubleTapped` in code-behind (`LibraryView.axaml.cs`) rather than a binding, since Avalonia has no built-in double-click-to-command binding — this is the one place View code-behind is expected, not a pattern to generalize.
 
+### Theme
+
+Dark-first, hawk-headed-parrot-inspired palette (charcoal + crimson + restrained feather blue/green). ~85-90% neutral, accents used only for their named semantic purpose — never assign a saturated color to a control just because it needs *a* color.
+
+- `Theme/Palette.axaml` — the single source of truth: `Color.*` values plus matching `Brush.*` (`Background`, `Surface`, `SurfaceElevated`, `Border`, `TextPrimary`, `TextSecondary`, `AccentPrimary` = crimson/selection/primary actions, `AccentSecondary` = feather blue/secondary emphasis, `Success` = sync/success states, `Warning`/`Error` = conventional amber/red, deliberately *not* bird-themed so they stay unambiguous). Adding a new UI color means adding it here, not inlining a hex value in a View.
+- `Theme/ControlStyles.axaml` — base `Styles` (Window/TextBlock/Button/TextBox/ListBox/TabControl/TabItem) that reference the palette via `DynamicResource`. Both files are merged into `App.axaml`.
+- `App.axaml` also overrides FluentTheme's documented accent customization points (`SystemAccentColor` + the `Light1-3`/`Dark1-3` ramp) with `AccentPrimary`'s values, so built-in accent-driven visuals (selection highlight, focus rings, `TabItem` selected indicator) pick up the crimson automatically instead of Fluent's default blue.
+- `RequestedThemeVariant="Dark"` is explicit, not following the OS theme — this app is dark-first by design, not incidentally dark because the last dev's OS was in dark mode.
+
 ## Pinned stack decisions (don't re-litigate)
 
 - C# / .NET 10, Avalonia 12 (CommunityToolkit.Mvvm), MVVM-ish

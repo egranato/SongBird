@@ -1,0 +1,52 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!--
+        SongBird palette - hawk-headed parrot inspired (dark charcoal plumage, crimson chest,
+        cool feather-blue accent). ~85-90% neutral, accents used sparingly and only for the
+        semantic purposes named below. Central source of truth - controls reference these
+        via DynamicResource, never a hardcoded hex.
+    -->
+
+    <!-- Neutrals -->
+    <Color x:Key="Color.Background">#FF121110</Color>
+    <Color x:Key="Color.Surface">#FF1C1A18</Color>
+    <Color x:Key="Color.SurfaceElevated">#FF262320</Color>
+    <Color x:Key="Color.Border">#FF34302B</Color>
+    <Color x:Key="Color.TextPrimary">#FFF3EEE6</Color>
+    <Color x:Key="Color.TextSecondary">#FFA69E93</Color>
+
+    <!-- Primary accent: crimson - selection, primary actions, brand -->
+    <Color x:Key="Color.AccentPrimary">#FFA31E34</Color>
+    <Color x:Key="Color.AccentPrimaryLight1">#FFB93A50</Color>
+    <Color x:Key="Color.AccentPrimaryLight2">#FFC85A6E</Color>
+    <Color x:Key="Color.AccentPrimaryLight3">#FFD77E8C</Color>
+    <Color x:Key="Color.AccentPrimaryDark1">#FF841829</Color>
+    <Color x:Key="Color.AccentPrimaryDark2">#FF66131F</Color>
+    <Color x:Key="Color.AccentPrimaryDark3">#FF480D16</Color>
+
+    <!-- Secondary accent: restrained feather blue - secondary emphasis, links -->
+    <Color x:Key="Color.AccentSecondary">#FF5E7F99</Color>
+
+    <!-- Success / sync accent: restrained natural green -->
+    <Color x:Key="Color.Success">#FF5B8A66</Color>
+
+    <!-- Warning / error: conventional UI semantics, not bird-themed -->
+    <Color x:Key="Color.Warning">#FFD98C3D</Color>
+    <Color x:Key="Color.Error">#FFE0483F</Color>
+
+    <!-- Brushes -->
+    <SolidColorBrush x:Key="Brush.Background" Color="{StaticResource Color.Background}" />
+    <SolidColorBrush x:Key="Brush.Surface" Color="{StaticResource Color.Surface}" />
+    <SolidColorBrush x:Key="Brush.SurfaceElevated" Color="{StaticResource Color.SurfaceElevated}" />
+    <SolidColorBrush x:Key="Brush.Border" Color="{StaticResource Color.Border}" />
+    <SolidColorBrush x:Key="Brush.TextPrimary" Color="{StaticResource Color.TextPrimary}" />
+    <SolidColorBrush x:Key="Brush.TextSecondary" Color="{StaticResource Color.TextSecondary}" />
+
+    <SolidColorBrush x:Key="Brush.AccentPrimary" Color="{StaticResource Color.AccentPrimary}" />
+    <SolidColorBrush x:Key="Brush.AccentSecondary" Color="{StaticResource Color.AccentSecondary}" />
+    <SolidColorBrush x:Key="Brush.Success" Color="{StaticResource Color.Success}" />
+    <SolidColorBrush x:Key="Brush.Warning" Color="{StaticResource Color.Warning}" />
+    <SolidColorBrush x:Key="Brush.Error" Color="{StaticResource Color.Error}" />
+
+</ResourceDictionary>

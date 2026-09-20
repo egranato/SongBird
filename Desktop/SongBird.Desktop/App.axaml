@@ -2,14 +2,36 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="SongBird.Desktop.App"
              xmlns:local="using:SongBird.Desktop"
-             RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+             RequestedThemeVariant="Dark">
+             <!-- Dark-first by design (see Theme/Palette.axaml); not following system theme. -->
 
     <Application.DataTemplates>
         <local:ViewLocator />
     </Application.DataTemplates>
 
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="/Theme/Palette.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!--
+                FluentTheme's documented accent customization points. Overriding these makes
+                built-in accent-driven visuals (selection highlight, focus rings, TabItem
+                indicator) follow our crimson instead of the default Fluent blue.
+            -->
+            <Color x:Key="SystemAccentColor">#FFA31E34</Color>
+            <Color x:Key="SystemAccentColorLight1">#FFB93A50</Color>
+            <Color x:Key="SystemAccentColorLight2">#FFC85A6E</Color>
+            <Color x:Key="SystemAccentColorLight3">#FFD77E8C</Color>
+            <Color x:Key="SystemAccentColorDark1">#FF841829</Color>
+            <Color x:Key="SystemAccentColorDark2">#FF66131F</Color>
+            <Color x:Key="SystemAccentColorDark3">#FF480D16</Color>
+        </ResourceDictionary>
+    </Application.Resources>
+
     <Application.Styles>
         <FluentTheme />
+        <StyleInclude Source="/Theme/ControlStyles.axaml" />
     </Application.Styles>
 </Application>
